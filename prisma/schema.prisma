@@ -6,22 +6,23 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Bundle {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  path      String
-  active    Boolean   @default(false)
-  items     Item[]
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  name   String  @unique
+  path   String
+  active Boolean @default(false)
+
   createAt  DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+  Item      Item[]
 }
 
 model Item {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
   unityName String
   type      String
   tier      String
@@ -29,20 +30,21 @@ model Item {
   timeLimit DateTime?
   price     Float     @default(0.00)
   limit     Int       @default(100)
-  name      String?
+  name      Json?
   thumbnail String?
   src       String?
 
-  Bundle   Bundle? @relation(fields: [bundleId], references: [id])
-  bundleId Int?
-  trait    Trait?  @relation(fields: [traitId], references: [id])
-  traitId  Int?
+  bundle   Bundle  @relation(fields: [bundleId], references: [id])
+  bundleId String  @db.ObjectId
+  Trait    Trait?  @relation(fields: [traitId], references: [id])
+  traitId  String? @db.ObjectId
 
   @@unique([id, unityName])
 }
 
 model Trait {
-  id   Int    @id @default(autoincrement())
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
-  item Item[]
+
+  items Item[]
 }
