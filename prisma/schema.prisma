@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Bundle {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  path      String
+  active    Boolean   @default(false)
+  items     Item[]
+  createAt  DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Item {
+  id        Int       @id @default(autoincrement())
+  unityName String
+  type      String
+  tier      String
+  active    Boolean   @default(false)
+  timeLimit DateTime?
+  price     Float     @default(0.00)
+  limit     Int       @default(100)
+  name      String?
+  thumbnail String?
+  src       String?
+
+  Bundle   Bundle? @relation(fields: [bundleId], references: [id])
+  bundleId Int?
+  trait    Trait?  @relation(fields: [traitId], references: [id])
+  traitId  Int?
+
+  @@unique([id, unityName])
+}
+
+model Trait {
+  id   Int    @id @default(autoincrement())
+  name String
+  item Item[]
+}
