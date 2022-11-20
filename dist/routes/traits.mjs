@@ -7,18 +7,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-import bodyParser from "body-parser";
+import { Router } from 'express';
+import { PrismaClient } from '@prisma/client';
+import bodyParser from 'body-parser';
 const router = Router();
 const prisma = new PrismaClient();
 router.use(bodyParser.json());
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header({
-        "Content-Range": "bytes : 0-9/10",
-        "Access-Control-Expose-Headers": "Content-Range",
+        'Content-Range': 'bytes : 0-9/10',
+        'Access-Control-Expose-Headers': 'Content-Range',
     });
-    const filter = req.query.filter ? JSON.parse(req.query.filter) : null;
+    const filter = req.query.filter
+        ? JSON.parse(req.query.filter)
+        : null;
     let traits = [];
     if (filter === null || filter === void 0 ? void 0 : filter.traitId) {
         traits = yield prisma.trait.findMany();
@@ -29,12 +31,12 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(traits);
 }));
 router
-    .route("/:id")
+    .route('/:id')
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    let trait = yield prisma.trait.findUnique({
+    const trait = yield prisma.trait.findUnique({
         where: {
-            id: Number(id),
+            id: id,
         },
     });
     res.json(trait);
@@ -43,7 +45,7 @@ router
     const { id } = req.params;
     const updatedItem = yield prisma.trait.update({
         where: {
-            id: Number(id),
+            id: id,
         },
         data: req.body,
     });
@@ -53,9 +55,10 @@ router
     const { id } = req.params;
     const deleteItem = prisma.trait.delete({
         where: {
-            id: Number(id),
+            id: id,
         },
     });
+    console.log('ciao');
     res.json(deleteItem);
 }));
 export default router;

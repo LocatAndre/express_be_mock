@@ -18,11 +18,15 @@ router.get('/', async (req: Request, res: Response) => {
     ? JSON.parse(req.query.filter as string)
     : null;
 
+  console.log('filter', filter);
+
   let items = [];
   if (filter?.bundleId) {
     items = await prisma.item.findMany({
       where: {
-        bundleId: filter.bundleId,
+        bundleId: {
+          equals: filter.bundleId,
+        },
       },
     });
   } else {

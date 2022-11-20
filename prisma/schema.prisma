@@ -25,7 +25,7 @@ model Item {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   unityName String
   type      String
-  tier      String
+  tier      String?
   active    Boolean   @default(false)
   timeLimit DateTime?
   price     Float     @default(0.00)
@@ -34,17 +34,26 @@ model Item {
   thumbnail String?
   src       String?
 
-  bundle   Bundle  @relation(fields: [bundleId], references: [id])
-  bundleId String  @db.ObjectId
-  Trait    Trait?  @relation(fields: [traitId], references: [id])
-  traitId  String? @db.ObjectId
+  bundle   Bundle @relation(fields: [bundleId], references: [id])
+  bundleId String @db.ObjectId
+
+  traitsId String[] @db.ObjectId
+  traits   Trait[]  @relation(fields: [traitsId], references: [id])
+
+  createAt  DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
   @@unique([id, unityName])
 }
 
 model Trait {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  unityName String @unique
+  name      Json
 
-  items Item[]
+  itemsId String[] @db.ObjectId
+  items   Item[]   @relation(fields: [itemsId], references: [id])
+
+  createAt  DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

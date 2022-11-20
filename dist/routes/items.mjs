@@ -7,60 +7,55 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-import bodyParser from "body-parser";
+import { Router } from 'express';
+import { PrismaClient } from '@prisma/client';
+import bodyParser from 'body-parser';
+// eslint-disable-next-line new-cap
 const router = Router();
 const prisma = new PrismaClient();
 router.use(bodyParser.json());
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header({
-        "Content-Range": "bytes : 0-9/10",
-        "Access-Control-Expose-Headers": "Content-Range",
+        'Content-Range': 'bytes : 0-9/10',
+        'Access-Control-Expose-Headers': 'Content-Range',
     });
-    const filter = req.query.filter ? JSON.parse(req.query.filter) : null;
+    const filter = req.query.filter
+        ? JSON.parse(req.query.filter)
+        : null;
+    console.log('filter', filter);
     let items = [];
     if (filter === null || filter === void 0 ? void 0 : filter.bundleId) {
         items = yield prisma.item.findMany({
             where: {
-                bundleId: Number(filter.bundleId),
+                bundleId: {
+                    equals: filter.bundleId,
+                },
             },
         });
     }
     else {
         items = yield prisma.item.findMany();
     }
-    res.json(items.map((item) => {
-        item.name = JSON.parse(item.name);
-        item.thumbnail = JSON.parse(item.thumbnail);
-        return item;
-    }));
+    res.json(items);
 }));
 router
-    .route("/:id")
+    .route('/:id')
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    let item = yield prisma.item.findUnique({
+    const item = yield prisma.item.findUnique({
         where: {
-            id: Number(id),
+            id: id,
         },
     });
-    if (item) {
-        item.name = JSON.parse(item.name);
-        item.thumbnail = JSON.parse(item.thumbnail);
-    }
     res.json(item);
 }))
     .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    let body = req.body;
-    body.name = JSON.stringify(body.name);
-    body.thumbnail = JSON.stringify(body.thumbnail);
     const updatedItem = yield prisma.item.update({
         where: {
-            id: Number(id),
+            id: id,
         },
-        data: body,
+        data: req.body,
     });
     res.json(updatedItem).status(200);
 }))
@@ -68,7 +63,7 @@ router
     const { id } = req.params;
     const deleteItem = prisma.item.delete({
         where: {
-            id: Number(id),
+            id: id,
         },
     });
     res.json(deleteItem).status(200);

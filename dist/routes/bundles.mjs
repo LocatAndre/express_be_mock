@@ -7,16 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import { Router } from 'express';
+import { PrismaClient } from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient();
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header({
-        "Content-Range": "bytes : 0-9/10",
-        "Access-Control-Expose-Headers": "Content-Range",
+        'Content-Range': 'bytes : 0-9/10',
+        'Access-Control-Expose-Headers': 'Content-Range',
     });
-    const filter = req.query.filter ? JSON.parse(req.query.filter) : null;
+    const filter = req.query.filter
+        ? JSON.parse(req.query.filter)
+        : null;
     let bundles = {};
     console.log(filter);
     if (filter === null || filter === void 0 ? void 0 : filter.id) {
@@ -33,12 +35,12 @@ router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     res.json(bundles);
 }));
-router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const bundle = yield prisma.bundle.findFirst({
         where: {
             id: {
-                equals: Number(id),
+                equals: id,
             },
         },
     });
