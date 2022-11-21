@@ -13,7 +13,9 @@ import bodyParser from 'body-parser';
 const router = Router();
 const prisma = new PrismaClient();
 router.use(bodyParser.json());
-router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router
+    .route('/')
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header({
         'Content-Range': 'bytes : 0-9/10',
         'Access-Control-Expose-Headers': 'Content-Range',
@@ -29,6 +31,17 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         traits = yield prisma.trait.findMany();
     }
     res.json(traits);
+}))
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+    const newTreat = yield prisma.trait.create({
+        data: {
+            name: req.body.name,
+            active: req.body.active,
+            itemsId: [req.body.character, ...req.body.weapons, ...req.body.pose],
+        },
+    });
+    res.json(newTreat);
 }));
 router
     .route('/:id')
@@ -60,9 +73,6 @@ router
         },
     });
     res.json(deleteItem);
-}))
-    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
 }));
 export default router;
 //# sourceMappingURL=traits.mjs.map

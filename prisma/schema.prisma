@@ -46,9 +46,10 @@ model Item {
 }
 
 model Trait {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  unityName String @unique
-  name      Json
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name Json
+
+  active Boolean @default(false)
 
   itemsId String[] @db.ObjectId
   items   Item[]   @relation(fields: [itemsId], references: [id])

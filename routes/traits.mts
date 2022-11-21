@@ -10,25 +10,40 @@ const prisma: PrismaClient = new PrismaClient();
 
 router.use(bodyParser.json());
 
-router.get('/', async (req: Request, res: Response) => {
-  res.header({
-    'Content-Range': 'bytes : 0-9/10',
-    'Access-Control-Expose-Headers': 'Content-Range',
+router
+  .route('/')
+  .get(async (req: Request, res: Response) => {
+    res.header({
+      'Content-Range': 'bytes : 0-9/10',
+      'Access-Control-Expose-Headers': 'Content-Range',
+    });
+
+    const filter = req.query.filter
+      ? JSON.parse(req.query.filter as string)
+      : null;
+
+    let traits = [];
+    if (filter?.traitId) {
+      traits = await prisma.trait.findMany();
+    } else {
+      traits = await prisma.trait.findMany();
+    }
+
+    res.json(traits);
+  })
+  .post(async (req: Request, res: Response) => {
+    console.log(req.body);
+
+    const newTreat = await prisma.trait.create({
+      data: {
+        name: req.body.name,
+        active: req.body.active,
+        itemsId: [req.body.character, ...req.body.weapons, ...req.body.pose],
+      },
+    });
+
+    res.json(newTreat);
   });
-
-  const filter = req.query.filter
-    ? JSON.parse(req.query.filter as string)
-    : null;
-
-  let traits = [];
-  if (filter?.traitId) {
-    traits = await prisma.trait.findMany();
-  } else {
-    traits = await prisma.trait.findMany();
-  }
-
-  res.json(traits);
-});
 
 router
   .route('/:id')
@@ -47,7 +62,6 @@ router
     const { id } = req.params;
 
     delete req.body.id;
-
     const updatedItem = await prisma.trait.update({
       where: {
         id: id,
@@ -67,9 +81,6 @@ router
     });
 
     res.json(deleteItem);
-  })
-  .post(async (req: Request, res: Response) => {
-    console.log(req.body);
   });
 
 export default router;
