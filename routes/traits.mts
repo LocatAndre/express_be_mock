@@ -46,6 +46,8 @@ router
   .put(async (req: Request, res: Response) => {
     const { id } = req.params;
 
+    delete req.body.id;
+
     const updatedItem = await prisma.trait.update({
       where: {
         id: id,
@@ -64,9 +66,10 @@ router
       },
     });
 
-    console.log('ciao');
-
     res.json(deleteItem);
+  })
+  .post(async (req: Request, res: Response) => {
+    console.log(req.body);
   });
 
 export default router;

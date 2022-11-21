@@ -31,8 +31,7 @@ model Item {
   price     Float     @default(0.00)
   limit     Int       @default(100)
   name      Json?
-  thumbnail String?
-  src       String?
+  thumbnail Json?
 
   bundle   Bundle @relation(fields: [bundleId], references: [id])
   bundleId String @db.ObjectId

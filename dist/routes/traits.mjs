@@ -43,6 +43,7 @@ router
 }))
     .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
+    delete req.body.id;
     const updatedItem = yield prisma.trait.update({
         where: {
             id: id,
@@ -58,8 +59,10 @@ router
             id: id,
         },
     });
-    console.log('ciao');
     res.json(deleteItem);
+}))
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
 }));
 export default router;
 //# sourceMappingURL=traits.mjs.map

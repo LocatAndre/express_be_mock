@@ -52,6 +52,7 @@ router
   .put(async (req: Request, res: Response) => {
     const { id } = req.params;
 
+    delete req.body.id;
     const updatedItem = await prisma.item.update({
       where: {
         id: id,
