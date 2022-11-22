@@ -67,7 +67,7 @@ router
 }))
     .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const deleteItem = prisma.trait.delete({
+    const deleteItem = yield prisma.trait.delete({
         where: {
             id: id,
         },

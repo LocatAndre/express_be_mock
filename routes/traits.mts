@@ -74,7 +74,7 @@ router
   .delete(async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const deleteItem = prisma.trait.delete({
+    const deleteItem = await prisma.trait.delete({
       where: {
         id: id,
       },
