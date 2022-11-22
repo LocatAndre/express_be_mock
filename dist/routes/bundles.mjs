@@ -33,15 +33,17 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     else {
         bundles = yield prisma.bundle.findMany();
     }
+    console.log(bundles);
     res.json(bundles);
 }));
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const bundle = yield prisma.bundle.findFirst({
         where: {
-            id: {
-                equals: id,
-            },
+            id: Number(id),
+        },
+        include: {
+            Item: true,
         },
     });
     res.json(bundle);

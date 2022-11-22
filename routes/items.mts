@@ -43,7 +43,7 @@ router
 
     const item: Item | null = await prisma.item.findUnique({
       where: {
-        id: id,
+        id: Number(id),
       },
     });
 
@@ -55,7 +55,7 @@ router
     delete req.body.id;
     const updatedItem = await prisma.item.update({
       where: {
-        id: id,
+        id: Number(id),
       },
       data: req.body,
     });
@@ -67,7 +67,7 @@ router
 
     const deleteItem = prisma.item.delete({
       where: {
-        id: id,
+        id: Number(id),
       },
     });
 

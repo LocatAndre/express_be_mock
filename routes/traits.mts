@@ -38,7 +38,7 @@ router
       data: {
         name: req.body.name,
         active: req.body.active,
-        itemsId: [req.body.character, ...req.body.weapons, ...req.body.pose],
+        // itemsId: [req.body.character, ...req.body.weapons, ...req.body.pose],
       },
     });
 
@@ -52,7 +52,7 @@ router
 
     const trait: Trait | null = await prisma.trait.findUnique({
       where: {
-        id: id,
+        id: Number(id),
       },
     });
 
@@ -64,7 +64,7 @@ router
     delete req.body.id;
     const updatedItem = await prisma.trait.update({
       where: {
-        id: id,
+        id: Number(id),
       },
       data: req.body,
     });
@@ -76,7 +76,7 @@ router
 
     const deleteItem = await prisma.trait.delete({
       where: {
-        id: id,
+        id: Number(id),
       },
     });
 

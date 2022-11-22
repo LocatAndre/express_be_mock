@@ -44,7 +44,7 @@ router
     const { id } = req.params;
     const item = yield prisma.item.findUnique({
         where: {
-            id: id,
+            id: Number(id),
         },
     });
     res.json(item);
@@ -54,7 +54,7 @@ router
     delete req.body.id;
     const updatedItem = yield prisma.item.update({
         where: {
-            id: id,
+            id: Number(id),
         },
         data: req.body,
     });
@@ -64,7 +64,7 @@ router
     const { id } = req.params;
     const deleteItem = prisma.item.delete({
         where: {
-            id: id,
+            id: Number(id),
         },
     });
     res.json(deleteItem).status(200);

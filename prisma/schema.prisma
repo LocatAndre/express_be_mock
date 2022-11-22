@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Bundle {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  id     Int     @id @default(autoincrement())
   name   String  @unique
   path   String
   active Boolean @default(false)
@@ -22,7 +22,7 @@ model Bundle {
 }
 
 model Item {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        Int       @id @default(autoincrement())
   unityName String
   type      String
   tier      String?
@@ -33,27 +33,24 @@ model Item {
   name      Json?
   thumbnail Json?
 
-  bundle   Bundle @relation(fields: [bundleId], references: [id])
-  bundleId String @db.ObjectId
-
-  traitsId String[] @db.ObjectId
-  traits   Trait[]  @relation(fields: [traitsId], references: [id])
-
   createAt  DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  Bundle   Bundle? @relation(fields: [bundleId], references: [id])
+  bundleId Int?
+
+  traits Trait[]
 
   @@unique([id, unityName])
 }
 
 model Trait {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name Json
-
+  id     Int     @id @default(autoincrement())
+  name   Json
   active Boolean @default(false)
-
-  itemsId String[] @db.ObjectId
-  items   Item[]   @relation(fields: [itemsId], references: [id])
 
   createAt  DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+
+  items Item[]
 }

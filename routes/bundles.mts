@@ -31,6 +31,8 @@ router.get('/', async (req: Request, res: Response) => {
     bundles = await prisma.bundle.findMany();
   }
 
+  console.log(bundles);
+
   res.json(bundles);
 });
 
@@ -39,9 +41,10 @@ router.get('/:id', async (req: Request, res: Response) => {
 
   const bundle: Bundle | null = await prisma.bundle.findFirst({
     where: {
-      id: {
-        equals: id,
-      },
+      id: Number(id),
+    },
+    include: {
+      Item: true,
     },
   });
 
