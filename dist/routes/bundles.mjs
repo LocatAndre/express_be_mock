@@ -9,8 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
+import bodyParser from 'body-parser';
 const router = Router();
 const prisma = new PrismaClient();
+router.use(bodyParser.json());
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.header({
         'Content-Range': 'bytes : 0-9/10',
@@ -47,6 +49,10 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         },
     });
     res.json(bundle);
+}));
+router.post('/new', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newBundle = yield prisma.bundle.create({ data: req.body });
+    res.json(newBundle);
 }));
 export default router;
 //# sourceMappingURL=bundles.mjs.map

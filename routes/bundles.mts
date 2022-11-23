@@ -3,8 +3,11 @@ import { Router } from 'express';
 import type { Bundle } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
 
+import bodyParser from 'body-parser';
+
 const router: Router = Router();
 const prisma: PrismaClient = new PrismaClient();
+router.use(bodyParser.json());
 
 router.get('/', async (req: Request, res: Response) => {
   res.header({
@@ -49,6 +52,11 @@ router.get('/:id', async (req: Request, res: Response) => {
   });
 
   res.json(bundle);
+});
+
+router.post('/new', async (req: Request, res: Response) => {
+  const newBundle = await prisma.bundle.create({ data: req.body });
+  res.json(newBundle);
 });
 
 export default router;

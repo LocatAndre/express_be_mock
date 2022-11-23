@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 app.use('/bundles', bundlesRoutes);
 app.use('/items', imtemsRoutes);
 app.use('/traits', traitsRoutes);
-app.listen(port, () => {
+app.listen(3000, () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
 //# sourceMappingURL=index.mjs.map

@@ -40,6 +40,7 @@ model Item {
   bundleId Int?
 
   traits Trait[]
+  Tags   Tag[]
 
   @@unique([id, unityName])
 }
@@ -52,5 +53,11 @@ model Trait {
   createAt  DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
+  items Item[]
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String
   items Item[]
 }
